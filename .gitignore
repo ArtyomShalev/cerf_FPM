@@ -1,0 +1,8 @@
+.idea
+CMakeCache.txt
+*.mod
+*.a
+*.cmake
+Makefile
+CMakeFiles
+cerf

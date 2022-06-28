@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 import matplotlib
-import seaborn as sns
+# import seaborn as sns
 
 
 def load_errors(filename, err_lim):
@@ -56,29 +56,30 @@ err_lim = 1e-16
 x, y = np.loadtxt('x.txt'), np.loadtxt('y.txt')
 x = convert_to_square_2d(x)
 y = convert_to_square_2d(y)
-fort_MIT_re_err, fort_MIT_im_err = load_errors('MIT_re_err.txt', err_lim), load_errors('MIT_im_err.txt', err_lim)
+py_rp_err, py_ip_err = load_errors('rp_err.txt', err_lim), load_errors('ip_err.txt', err_lim)
+# fort_MIT_re_err, fort_MIT_im_err = load_errors('MIT_re_err.txt', err_lim), load_errors('MIT_im_err.txt', err_lim)
 print('max_MIT_re_err = ')
-print(max(fort_MIT_re_err))
+print(max(py_rp_err))
 print('max_MIT_im_err = ')
-print(max(fort_MIT_im_err))
-fort_MIT_re_err = convert_to_square_2d(fort_MIT_re_err)
-fort_MIT_im_err = convert_to_square_2d(fort_MIT_im_err)
+print(max(py_ip_err))
+# fort_MIT_re_err = convert_to_square_2d(fort_MIT_re_err)
+# fort_MIT_im_err = convert_to_square_2d(fort_MIT_im_err)
 # scipy_re_err, scipy_im_err = load_errors('scipy_re_err.txt', err_lim), load_errors('scipy_im_err.txt', err_lim)
 # scipy_re_err = convert_to_square_2d(scipy_re_err)
 # scipy_im_err = convert_to_square_2d(scipy_im_err)
-Zaghoul_re_err, Zaghoul_im_err = load_errors('Zaghoul_re_err.txt', err_lim), load_errors('Zaghoul_im_err.txt', err_lim)
-print('max_Zaghoul_re_err = ')
-print(max(Zaghoul_re_err))
-print('max_Zaghoul_im_err = ')
-print(max(Zaghoul_im_err))
-Zaghoul_re_err = convert_to_square_2d(Zaghoul_re_err)
-Zaghoul_im_err = convert_to_square_2d(Zaghoul_im_err)
+# Zaghoul_re_err, Zaghoul_im_err = load_errors('Zaghoul_re_err.txt', err_lim), load_errors('Zaghoul_im_err.txt', err_lim)
+# print('max_Zaghoul_re_err = ')
+# print(max(Zaghoul_re_err))
+# print('max_Zaghoul_im_err = ')
+# print(max(Zaghoul_im_err))
+# Zaghoul_re_err = convert_to_square_2d(Zaghoul_re_err)
+# Zaghoul_im_err = convert_to_square_2d(Zaghoul_im_err)
 
 cmap_std = matplotlib.colors.ListedColormap(sns.color_palette("RdBu_r", 16))
 exp_min = -8
 exp_max = 8
-implementations = [fort_MIT_re_err, fort_MIT_im_err, Zaghoul_re_err, Zaghoul_im_err]
-impls_str = ['Johnson real error', 'Johnson image error', 'Zaghoul real error', 'Zaghoul image error']
+# implementations = [fort_MIT_re_err, fort_MIT_im_err, Zaghoul_re_err, Zaghoul_im_err]
+# impls_str = ['Johnson real error', 'Johnson image error', 'Zaghoul real error', 'Zaghoul image error']
 
 fig = plt.figure(figsize=(12,7*2))
 fig.tight_layout()

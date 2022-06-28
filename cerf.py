@@ -2,7 +2,7 @@ import math
 import cmath
 import sys
 import numpy as np
-import timeit
+
 
 def cerf(z):
     if z == 0:

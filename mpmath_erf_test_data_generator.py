@@ -116,16 +116,16 @@ else:
         new_string = results_to_one_str(RP, IP, accuracy_dps)
 
 # ---- if reference data are needed only in txt format ---------
-# output_dps = 30
-# with open('wr_ref.txt', 'w') as f:
-#     for line in wr:
-#         f.write(mp.nstr(line, output_dps))
-#         f.write('\n')
-#
-# with open('wi_ref.txt', 'w') as f:
-#     for line in wi:
-#         f.write(mp.nstr(line, output_dps))
-#         f.write('\n')
+output_dps = 30
+with open('rp_ref.txt', 'w') as f:
+    for line in RP:
+        f.write(mp.nstr(line, output_dps))
+        f.write('\n')
+
+with open('ip_ref.txt', 'w') as f:
+    for line in IP:
+        f.write(mp.nstr(line, output_dps))
+        f.write('\n')
 # --------------------------------------------------------
     RP, IP = results_postprocessing(RP, IP, output_dps)
     arr_init_lines = init_arrs(arr_names, len(x), max_str_len)

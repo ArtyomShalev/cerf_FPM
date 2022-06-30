@@ -37,18 +37,18 @@ def cerf(z):
             u2 = 2*u3
             new = u3/h3
             if abs((new-old)/old) < 5e-6: break
-            elif np.isfinite(new):
+            elif not np.isfinite(new):
                 new = old
                 break
             old = new
         res = 1j*new/math.pi
 
-        if z_orig.real < 0:
-            if z_orig.imag >= 0:
-                res = np.conj(res)
-            else:
-                res = 2*cmath.exp(-z**2) - res
-        elif z_orig.imag < 0:
-            res = np.conj(2*cmath.exp(-z**2) - res)
+    if z_orig.real < 0:
+        if z_orig.imag >= 0:
+            res = np.conj(res)
+        else:
+            res = 2*cmath.exp(-z**2) - res
+    elif z_orig.imag < 0:
+        res = np.conj(2*cmath.exp(-z**2) - res)
 
     return res

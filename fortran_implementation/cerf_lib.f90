@@ -1,9 +1,9 @@
 module cerf_lib
-    use, intrinsic :: IEEE_ARITHMETIC, only: IEEE_IS_FINITE
+!    use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
     implicit none
     integer, parameter :: dp = kind(0.0D0)
     complex(dp), parameter :: ci = (0.0_dp, 1.0_dp)
-    real(dp), parameter :: pi = 4.0_dp * ATAN(1.0_dp), eps =  2.22e-16_dp
+    real(dp), parameter :: pi = 4.0_dp * ATAN(1.0_dp), eps =  2.22e-16_dp, inf = HUGE(1.0_dp)
 contains
     !=======================================================================
     recursive function factorial(n) result (f)
@@ -18,9 +18,9 @@ contains
 
     complex(dp) function cerf(z)
 
-        real(dp) :: new, old
-        complex(dp) :: z, z_orig, acc, last, u2, u3, h2, h3
-        integer :: n, h1, u1
+!        real(dp) :: new, old
+        complex(dp) :: z, z_orig, acc, last, u2, u3, h2, h3, new, old, h1, u1
+        integer :: n
         !-----------------------------------------
         if (z == 0.0_dp) then
             cerf = 1.0_dp
@@ -42,10 +42,10 @@ contains
                 end do
                 cerf = exp(-z*z)*(1 + 2*ci*acc/sqrt(pi))
             else
-                old = 1e6_dp
-                h1 = 1.0_dp
+                old = cmplx(1.0e6_dp, 0.0_dp, dp)
+                h1 = cmplx(1.0_dp, 0.0_dp, dp)
                 h2 = 2.0_dp*z
-                u1 = 0.0_dp
+                u1 = cmplx(0.0_dp, 0.0_dp, dp)
                 u2 = 2.0_dp*sqrt(pi)
                 do n = 1, 300
                     h3 = h2*z - n*h1
@@ -58,7 +58,7 @@ contains
                     if (abs((new-old)/old) < 5e-6_dp) then
                         exit
                     else
-                        if (IEEE_IS_FINITE(new) .eqv. .true.) then
+                        if (new == inf) then
                             new = old
                             exit
                         end if
@@ -66,21 +66,23 @@ contains
                     old = new
                 end do
                 cerf = ci*new/pi
-                if (real(z_orig) < 0) then
-                    if (aimag(z_orig) >= 0) then
-                        cerf = conjg(cerf)
-                    else
-                        cerf = 2*exp(-z*z) - cerf
-                    end if
-                else
-                    if (aimag(z_orig) < 0) then
-                        cerf = conjg(2*exp(-z*z) - cerf)
-                    end if
-                 end if
             end if
         end if
 
+        if (real(z_orig) < 0) then
+            if (aimag(z_orig) >= 0) then
+                cerf = conjg(cerf)
+            else
+                cerf = 2*exp(-z*z) - cerf
+            end if
+        else
+            if (aimag(z_orig) < 0) then
+                cerf = conjg(2*exp(-z*z) - cerf)
+            end if
+         end if
+
         return
+
     end function cerf
 
 end module cerf_lib

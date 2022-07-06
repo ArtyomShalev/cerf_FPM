@@ -84,14 +84,6 @@ Z = [
     0+1j*51
 ]
 
-# ------ py implementation ---------
-rp, ip = cerf_py_jit(Z)
-np.savetxt('../data/py_rp.txt', rp)
-np.savetxt('../data/py_ip.txt', ip)
-# ----- scipy ----
-rp, ip = cerf_scipy(Z)
-np.savetxt('../data/scipy_rp.txt', rp)
-np.savetxt('../data/scipy_ip.txt', ip)
 
 # ----- time measuring --------
 if is_time_measure_needed:
@@ -142,3 +134,11 @@ if is_time_measure_needed:
         sum += time.time() - start
     print(f'scipy {sum} [s]')
 
+# ------ py implementation ---------
+rp, ip = cerf_py_jit(Z)
+np.savetxt('../data/py_rp.txt', rp)
+np.savetxt('../data/py_ip.txt', ip)
+# ----- scipy ----
+rp, ip = cerf_scipy(Z)
+np.savetxt('../data/scipy_rp.txt', rp)
+np.savetxt('../data/scipy_ip.txt', ip)

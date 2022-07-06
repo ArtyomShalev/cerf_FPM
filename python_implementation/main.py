@@ -3,21 +3,16 @@ from cerf import *
 from scipy import special
 import time
 
-# def run_tests():
-#     assert special.erf(1.0+1j*2.0) == -0.5366435657785664 + 1j*-5.0491437034470374
 
-def measure_time(func, arg, iters):
-    start, end = [], []
-    for _ in range(iters):
-        start.append(time.time())
-        func(arg)
-        end.append(time.time())
-    start, end = np.array(start), np.array(end)
-    average_time = sum(end - start)/len(end)
+def cerf_py_jit(Z):
+    rp, ip = [], []
+    for z in Z:
+        result = cerf_jit(z)
+        rp.append(result.real)
+        ip.append(result.imag)
 
-    # print(average_time, '[s]')
+    return rp, ip
 
-    return average_time
 
 def cerf_py(Z):
     rp, ip = [], []
@@ -27,7 +22,6 @@ def cerf_py(Z):
         ip.append(result.imag)
 
     return rp, ip
-
 
 def cerf_scipy(Z):
     rp, ip = [], []
@@ -90,29 +84,61 @@ Z = [
     0+1j*51
 ]
 
-# ------ using generators -------
-# results = (cerf(z) for z in Z)
-# for result in results:
-#     print(result)
-# ------ using for loop ---------
-# rp, ip = cerf_py(Z)
-# np.savetxt('py_rp.txt', rp)
-# np.savetxt('py_ip.txt', ip)
-# ----- time measuring --------
-if is_time_measure_needed:
-    times = []
-    for i in range(1000):
-        start = time.time()
-        cerf_py(Z)
-        times.append(time.time() - start)
-    print(min(times), 's')
-
-# print('Py', sum(total_time_py)/len(total_time_py))
-# print('Scipy', sum(total_time_scipy)/len(total_time_scipy))
-
-
-
+# ------ py implementation ---------
+rp, ip = cerf_py_jit(Z)
+np.savetxt('../data/py_rp.txt', rp)
+np.savetxt('../data/py_ip.txt', ip)
 # ----- scipy ----
 rp, ip = cerf_scipy(Z)
-np.savetxt('scipy_rp.txt', rp)
-np.savetxt('scipy_ip.txt', ip)
+np.savetxt('../data/scipy_rp.txt', rp)
+np.savetxt('../data/scipy_ip.txt', ip)
+
+# ----- time measuring --------
+if is_time_measure_needed:
+    print('---- args -> 10 000 times----------')
+    sum = 0
+    for z in Z:
+        for i in range(10000):
+            start = time.time()
+            cerf(z)
+            sum += time.time() - start
+    print(f'Py {sum} [s]')
+
+    sum = 0
+    for z in Z:
+        for i in range(10000):
+            start = time.time()
+            cerf_jit(z)
+            sum += time.time() - start
+    print(f'Py jit {sum} [s]')
+
+    sum = 0
+    for z in Z:
+        for i in range(10000):
+            start = time.time()
+            special.wofz(z)
+            sum += time.time() - start
+    print(f'scipy {sum} [s]')
+
+    print('---- 10 000 times -> args ----------')
+    sum = 0
+    for i in range(10000):
+        start = time.time()
+        cerf_py(Z)
+        sum += time.time() - start
+    print(f'Py {sum} [s]')
+
+    sum = 0
+    for i in range(10000):
+        start = time.time()
+        cerf_py_jit(Z)
+        sum += time.time() - start
+    print(f'Py jit {sum} [s]')
+
+    sum = 0
+    for i in range(10000):
+        start = time.time()
+        cerf_scipy(Z)
+        sum += time.time() - start
+    print(f'scipy {sum} [s]')
+

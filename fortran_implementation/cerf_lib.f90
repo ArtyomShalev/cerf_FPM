@@ -1,5 +1,4 @@
 module cerf_lib
-!    use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
     implicit none
     integer, parameter :: dp = kind(0.0D0)
     complex(dp), parameter :: ci = (0.0_dp, 1.0_dp)
@@ -17,9 +16,8 @@ contains
 
 
     complex(dp) function cerf(z)
-
-!        real(dp) :: new, old
         complex(dp) :: z, z_orig, acc, last, u2, u3, h2, h3, new, old, h1, u1
+        real :: n_gamma
         integer :: n
         !-----------------------------------------
         if (z == 0.0_dp) then
@@ -37,6 +35,9 @@ contains
                 acc = z
                 do n = 1, 500
                     last = z**(2*n+1)/(factorial(n)*(2*n+1))
+!                    n_gamma = n
+!                    last = z**(2*n+1)/(gamma(n_gamma+1)*(2*n+1))
+
                     acc = acc + last
                     if (abs(last) < eps) exit
                 end do

@@ -8,3 +8,4 @@ CMakeFiles
 cerf
 *.txt
 __pycache__
+!CMakeList.txt
